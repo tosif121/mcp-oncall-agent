@@ -103,7 +103,7 @@ export async function fetchRecentCommits(repo: string): Promise<Commit[]> {
       const result: any = await client.callTool({
         // eslint-disable-line @typescript-eslint/no-explicit-any
         name: toolName,
-        arguments: { owner, repo: repoName, limit: 10 },
+        arguments: { owner, repo: repoName, perPage: 10 }, // Changed limit to perPage
       });
 
       console.log(`[MCP] Tool result for ${owner}/${repoName}:`, JSON.stringify(result).substring(0, 200)); // Log first 200 chars
