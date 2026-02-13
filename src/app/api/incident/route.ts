@@ -7,7 +7,7 @@ import { sendSlackNotification } from '@/lib/mcp'; // Added
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, service, errorKeyword } = body;
+    const { title, service, errorKeyword, githubRepo } = body;
 
     // 1. Create Incident Record
     const { data: incident, error } = await supabase
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     if (error) throw error;
 
     // 2. Trigger Agent Workflow (in background, but awaiting for demo simplicity)
-    const context = await buildIncidentContext(incident.id, service, errorKeyword);
+    const context = await buildIncidentContext(incident.id, service, errorKeyword, githubRepo);
     const report = await generateIncidentReport(context);
 
     // 3. Store Report

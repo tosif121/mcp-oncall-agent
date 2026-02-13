@@ -17,12 +17,17 @@ export interface IncidentContextData {
   messages: SlackMessage[]; // Added
 }
 
-export async function buildIncidentContext(incidentId: string, serviceName: string, errorKeyword: string) {
+export async function buildIncidentContext(
+  incidentId: string,
+  serviceName: string,
+  errorKeyword: string,
+  githubRepo?: string,
+) {
   console.log(`Building context for incident ${incidentId}...`);
 
   // 1. Fetch Data in Parallel
   const [commits, logs, tickets, messages] = await Promise.all([
-    fetchRecentCommits(process.env.GITHUB_REPO || 'archestra-ai/archestra'),
+    fetchRecentCommits(githubRepo || process.env.GITHUB_REPO || 'archestra-ai/archestra'),
     fetchErrorLogs(serviceName, 60),
     searchJiraTickets(errorKeyword),
     fetchSlackMessages(errorKeyword), // Added

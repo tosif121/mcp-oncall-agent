@@ -14,6 +14,7 @@ export default function Dashboard() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [incidents, setIncidents] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [repo, setRepo] = useState('archestra-ai/archestra'); // Default
 
   const fetchIncidents = async () => {
     setLoading(true);
@@ -34,7 +35,7 @@ export default function Dashboard() {
     try {
       await fetch('/api/incident', {
         method: 'POST',
-        body: JSON.stringify(scenario),
+        body: JSON.stringify({ ...scenario, githubRepo: repo }),
       });
       await fetchIncidents();
       toast.success('Incident simulated successfully!', { id: loadingToast });
@@ -48,14 +49,27 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <div className="container mx-auto p-8 max-w-5xl">
-        <header className="flex justify-between items-center mb-12 pb-6 border-b">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 pb-6 border-b gap-4">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
               Welcome Back
             </h1>
             <p className="text-muted-foreground mt-2 text-lg">System Status: Operational</p>
           </div>
-          <div className="flex items-center gap-4">
+          
+          <div className="flex flex-col items-end gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-muted-foreground">Git Repo:</span>
+                <input 
+                  type="text" 
+                  value={repo} 
+                  onChange={(e) => setRepo(e.target.value)}
+                  className="px-3 py-1.5 rounded border bg-background text-sm w-64 focus:ring-2 focus:ring-primary outline-none"
+                  placeholder="owner/repo"
+                />
+            </div>
+            
+            <div className="flex items-center gap-4">
             <div className="relative">
               <Button
                 onClick={() => document.getElementById('simulation-menu')?.classList.toggle('hidden')}
@@ -70,7 +84,7 @@ export default function Dashboard() {
                 className="hidden absolute right-0 mt-2 w-56 bg-card rounded-md shadow-lg border border-border z-50"
               >
                 <div className="py-1">
-                  <button
+                    <button
                     onClick={() => {
                       const scenarios = [
                         {
