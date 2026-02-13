@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# On-Call Context Builder (Universal DevOps Agent)
 
-## Getting Started
+**The Winning Strategy:** Build a tool that solves the "2 AM Nightmare" for on-call engineers.
 
-First, run the development server:
+## 🏆 Why This Works
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 1. Solves a Real Problem
+
+Judges personally experience the pain of on-call incidents. We solve it by automating the first 15 minutes of investigation.
+
+### 2. Tight Scope = Polished Execution
+
+Instead of 20 half-baked features, we focused on **5 Core Features**:
+
+### 3. Demo Story
+
+> "It's 2 AM. PagerDuty wakes you up: '500 errors spiking.' You open our agent. In 10 seconds, it shows: Recent commit by John, error logs pointing to DB timeout, related Jira ticket about DB performance. Suggested action: Rollback commit or scale DB. You click 'Rollback.' Incident resolved. Back to sleep. This is what we built."
+
+## 🏗️ Architecture
+
+Leveraging Archestra's unique features (858 MCP servers, multi-LLM, security controls).
+
+```mermaid
+graph TD
+    User([User / UI])
+    Sim([PagerDuty Sim]) -->|Webhook| Agent[Next.js Agent]
+    Agent <-->|Read/Write| DB[(Supabase)]
+    Agent -->|Query| AI[AI Logic Layer]
+    Agent -->|Connect| MCP[Archestra MCP Gateway]
+    MCP -->|Fetch| GH[GitHub]
+    MCP -->|Search| Logs[Datadog/CloudWatch]
+    MCP -->|Search| Jira[Jira Tickets]
+    MCP -->|Search| Slack[Slack Chat]
+    AI -->|Report| Agent
+    User -->|View Incident| Agent
+    User -->|Execute Action| Agent
+    Agent -->|Trigger| MCP
+    MCP -->|Remediate| Infra[Infrastructure]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Core Features (Tight Scope)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  **Alert Display:** Real-time dashboard showing critical incident details.
+2.  **GitHub Commits:** Fetches recent changes via **Archestra GitHub MCP**.
+3.  **Log Patterns:** Displays error logs and anomaly patterns (via Log MCP).
+4.  **AI Summary:** Archestra Logic Layer analyzes context and suggests remediation.
+5.  **Action Buttons:** One-click Rollback/Scale triggers with confirmation.
+6.  **Bonus:** Slack Notification preview with deep links.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✅ Final Checklist
 
-## Learn More
+- [x] Solve a problem judges personally experience (on-call incidents)
+- [x] Tight scope (3 core workflows, not 20 features)
+- [x] Leverage your existing skills (APIs, Next.js, databases)
+- [x] Use Archestra's unique features (858 MCP servers, multi-LLM, security controls)
+- [x] Polish over features (working demo > half-baked features)
+- [x] Tell a compelling story (3-minute demo with emotional hook)
+- [x] Document obsessively (README, architecture diagram, video)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Go build the On-Call Context Builder. Execute cleanly. You'll win this time.
+# mcp-oncall-agent
