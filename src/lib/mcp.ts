@@ -95,12 +95,23 @@ export async function fetchRecentCommits(repo: string): Promise<Commit[]> {
     const toolName = findToolName(['list_commits', 'get_commits', 'recent_commits']);
 
     if (toolName) {
-      console.log(`Calling MCP tool: ${toolName}`);
+      console.log(`Calling MCP tool: ${toolName} for ${repo}`);
+
+      // Parse owner/repo from the string "owner/repo"
+      const [owner, repoName] = repo.includes('/') ? repo.split('/') : ['archestra-ai', repo];
+
       const result: any = await client.callTool({
         // eslint-disable-line @typescript-eslint/no-explicit-any
         name: toolName,
-        arguments: { repo, limit: 5, owner: 'archestra-ai' },
+        arguments: { owner, repo: repoName, limit: 10 },
       });
+
+      console.log(`[MCP] Tool result for ${owner}/${repoName}:`, JSON.stringify(result).substring(0, 200)); // Log first 200 chars
+
+      if (!result || !result.content || result.isError) {
+        console.error(`[MCP] Tool Execution Failed:`, result);
+        return [];
+      }
 
       const content = JSON.parse(result.content[0].text);
       if (Array.isArray(content)) {
