@@ -159,6 +159,11 @@ export default function Dashboard() {
                             errorKeyword: 'ConnectionRefused',
                           },
                           {
+                            title: 'Critical: MCP Tool Connection Failure',
+                            service: 'mcp-service',
+                            errorKeyword: 'GitHubAPIError',
+                          },
+                          {
                             title: 'Payment API 500 Errors',
                             service: 'payment-service',
                             errorKeyword: 'PaymentGatewayError',
