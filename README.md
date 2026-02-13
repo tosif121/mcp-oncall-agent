@@ -2,7 +2,7 @@
 
 **The Winning Strategy:** Build a tool that solves the "2 AM Nightmare" for on-call engineers.
 
-## Why This Works
+## 🏆 Why This Works
 
 ### 1. Solves a Real Problem
 
@@ -16,7 +16,7 @@ Instead of 20 half-baked features, we focused on **5 Core Features**:
 
 > "It's 2 AM. PagerDuty wakes you up: '500 errors spiking.' You open our agent. In 10 seconds, it shows: Recent commit by John, error logs pointing to DB timeout, related Jira ticket about DB performance. Suggested action: Rollback commit or scale DB. You click 'Rollback.' Incident resolved. Back to sleep. This is what we built."
 
-## Architecture
+## 🏗️ Architecture
 
 Leveraging Archestra's unique features (858 MCP servers, multi-LLM, security controls).
 
@@ -38,7 +38,7 @@ graph TD
     MCP -->|Remediate| Infra[Infrastructure]
 ```
 
-## Core Features (Tight Scope)
+## 🚀 Core Features (Tight Scope)
 
 1.  **Alert Display:** Real-time dashboard showing critical incident details.
 2.  **GitHub Commits:** Fetches recent changes via **Archestra GitHub MCP**.
@@ -47,7 +47,7 @@ graph TD
 5.  **Action Buttons:** One-click Rollback/Scale triggers with confirmation.
 6.  **Bonus:** Slack Notification preview with deep links.
 
-## Final Checklist
+## ✅ Final Checklist
 
 - [x] Solve a problem judges personally experience (on-call incidents)
 - [x] Tight scope (3 core workflows, not 20 features)
@@ -58,5 +58,4 @@ graph TD
 - [x] Document obsessively (README, architecture diagram, video)
 
 Go build the On-Call Context Builder. Execute cleanly. You'll win this time.
-
 # mcp-oncall-agent
