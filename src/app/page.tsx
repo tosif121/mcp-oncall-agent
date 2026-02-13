@@ -138,68 +138,19 @@ export default function Dashboard() {
             <div className="flex items-center gap-4">
               <div className="relative">
                 <Button
-                  onClick={() => document.getElementById('simulation-menu')?.classList.toggle('hidden')}
+                  onClick={() =>
+                    simulateIncident({
+                      title: 'Production Alert: High Error Rate',
+                      service: 'application-server',
+                      errorKeyword: 'InternalServerError',
+                    })
+                  }
                   disabled={loading}
                   className="font-semibold shadow-lg hover:shadow-xl transition-all"
                 >
                   {loading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
-                  Simulate Incident
+                  Trigger Live Incident
                 </Button>
-                <div
-                  id="simulation-menu"
-                  className="hidden absolute right-0 mt-2 w-56 bg-card rounded-md shadow-lg border border-border z-50"
-                >
-                  <div className="py-1">
-                    <button
-                      onClick={() => {
-                        const scenarios = [
-                          {
-                            title: 'High Latency in Auth Service',
-                            service: 'auth-service',
-                            errorKeyword: 'ConnectionRefused',
-                          },
-                          {
-                            title: 'Payment API 500 Errors',
-                            service: 'payment-service',
-                            errorKeyword: 'PaymentGatewayError',
-                          },
-                          { title: 'Database CPU Spike > 90%', service: 'user-db', errorKeyword: 'QueryTimeout' },
-                        ];
-                        simulateIncident(scenarios[Math.floor(Math.random() * scenarios.length)]);
-                        document.getElementById('simulation-menu')?.classList.add('hidden');
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-red-500 font-medium"
-                    >
-                      Simulate SRE Incident
-                    </button>
-                    <button
-                      onClick={() => {
-                        simulateIncident({
-                          title: 'Critical: S3 Public Access Detection',
-                          service: 'aws-s3-security',
-                          errorKeyword: 'ComplianceViolation',
-                        });
-                        document.getElementById('simulation-menu')?.classList.add('hidden');
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-blue-500 font-medium"
-                    >
-                      Simulate Security Alert
-                    </button>
-                    <button
-                      onClick={() => {
-                        simulateIncident({
-                          title: 'Cost Alert: Monthly Budget Exceeded',
-                          service: 'aws-cost-explorer',
-                          errorKeyword: 'BudgetThresholdBreached',
-                        });
-                        document.getElementById('simulation-menu')?.classList.add('hidden');
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-green-500 font-medium"
-                    >
-                      Simulate FinOps Alert
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
