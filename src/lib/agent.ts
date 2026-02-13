@@ -25,9 +25,18 @@ export async function buildIncidentContext(
 ) {
   console.log(`Building context for incident ${incidentId}...`);
 
+  // Helper to extract owner/repo from various formats
+  const cleanRepo = (input?: string) => {
+    if (!input) return process.env.GITHUB_REPO || 'archestra-ai/archestra';
+    return input.replace('https://github.com/', '').replace('git@github.com:', '').replace('.git', '').trim();
+  };
+
+  const targetRepo = cleanRepo(githubRepo);
+  console.log(`Using Repo: ${targetRepo}`);
+
   // 1. Fetch Data in Parallel
   const [commits, logs, tickets, messages] = await Promise.all([
-    fetchRecentCommits(githubRepo || process.env.GITHUB_REPO || 'archestra-ai/archestra'),
+    fetchRecentCommits(targetRepo),
     fetchErrorLogs(serviceName, 60),
     searchJiraTickets(errorKeyword),
     fetchSlackMessages(errorKeyword), // Added
