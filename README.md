@@ -2,6 +2,26 @@
 
 **The Winning Strategy:** Build a tool that solves the "2 AM Nightmare" for on-call engineers.
 
+## 🚀 How to Demo
+
+### 1. **Connect Your Repository**
+
+- The app now supports **Dynamic Repository Connection**.
+- Enter any public GitHub repository URL (e.g., `https://github.com/owner/repo`) in the dashboard header.
+- Click **Connect** to link the agent to that codebase.
+
+### 2. **Simulate an Incident**
+
+- Click the **"Simulate Incident"** button.
+- Choose a scenario (SRE, Security, or FinOps).
+- The Agent will:
+  1.  **Analyze** the incident context.
+  2.  **Fetch Real Commits** from your connected repo via MCP.
+  3.  **Search Logs & Tickets** (simulated for demo stability).
+  4.  **Generate a Report** with root cause analysis.
+
+### 3. **View Report**
+
 ## 🏆 Why This Works
 
 ### 1. Solves a Real Problem
@@ -58,4 +78,5 @@ graph TD
 - [x] Document obsessively (README, architecture diagram, video)
 
 Go build the On-Call Context Builder. Execute cleanly. You'll win this time.
+
 # mcp-oncall-agent
