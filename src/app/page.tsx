@@ -90,7 +90,7 @@ export default function Dashboard() {
                     }}
                     className="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-red-500 font-medium"
                   >
-                    🔴 Simulate SRE Incident
+                    Simulate SRE Incident
                   </button>
                   <button
                     onClick={() => {
@@ -103,7 +103,7 @@ export default function Dashboard() {
                     }}
                     className="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-blue-500 font-medium"
                   >
-                    🛡️ Simulate Security Alert
+                    Simulate Security Alert
                   </button>
                   <button
                     onClick={() => {
@@ -116,7 +116,7 @@ export default function Dashboard() {
                     }}
                     className="block w-full text-left px-4 py-2 text-sm hover:bg-muted text-green-500 font-medium"
                   >
-                    💰 Simulate FinOps Alert
+                    Simulate FinOps Alert
                   </button>
                 </div>
               </div>
