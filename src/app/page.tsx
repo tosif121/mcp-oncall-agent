@@ -34,7 +34,13 @@ export default function Dashboard() {
 
   const fetchIncidents = async () => {
     setLoading(true);
-    const { data } = await supabase.from('incidents').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('incidents').select('*').order('created_at', { ascending: false });
+
+    if (isConnected && repo) {
+      query = query.eq('repo_name', repo);
+    }
+
+    const { data } = await query;
     setIncidents(data || []);
     setLoading(false);
   };

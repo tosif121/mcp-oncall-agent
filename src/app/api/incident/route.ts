@@ -10,16 +10,24 @@ export async function POST(request: Request) {
     const { title, service, errorKeyword, githubRepo } = body;
 
     // 1. Create Incident Record
+    // Sanitize and default repo
+    const targetRepo = githubRepo || 'archestra-ai/archestra';
+
     const { data: incident, error } = await supabase
       .from('incidents')
-      .insert({ title, description: `Alert from ${service}: ${errorKeyword}`, status: 'open' })
+      .insert({
+        title,
+        description: `Alert from ${service}: ${errorKeyword}`,
+        status: 'open',
+        repo_name: targetRepo, // Store the repo name
+      })
       .select()
       .single();
 
     if (error) throw error;
 
     // 2. Trigger Agent Workflow (in background, but awaiting for demo simplicity)
-    const context = await buildIncidentContext(incident.id, service, errorKeyword, githubRepo);
+    const context = await buildIncidentContext(incident.id, service, errorKeyword, targetRepo);
     const report = await generateIncidentReport(context);
 
     // 3. Store Report
