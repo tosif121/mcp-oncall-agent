@@ -14,7 +14,23 @@ export default function Dashboard() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [incidents, setIncidents] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [repo, setRepo] = useState('archestra-ai/archestra'); // Default
+  const [repo, setRepo] = useState('');
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('active_repo');
+    if (stored) {
+      setRepo(stored);
+      setIsConnected(true);
+    }
+  }, []);
+
+  const handleConnect = () => {
+    if (!repo) return;
+    localStorage.setItem('active_repo', repo);
+    setIsConnected(true);
+    toast.success(`Connected to ${repo}`);
+  };
 
   const fetchIncidents = async () => {
     setLoading(true);
@@ -24,9 +40,9 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchIncidents();
+    if (isConnected) fetchIncidents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isConnected]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const simulateIncident = async (scenario: any) => {
@@ -46,6 +62,44 @@ export default function Dashboard() {
     setLoading(false);
   };
 
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+        <Card className="w-full max-w-md shadow-2xl border-primary/20">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-primary/10 rounded-full">
+                <ShieldCheck className="w-12 h-12 text-primary" />
+              </div>
+            </div>
+            <CardTitle className="text-3xl font-bold">Connect Repository</CardTitle>
+            <CardDescription className="text-lg">
+              Link your GitHub project to start the On-Call Agent using Archestra MCP.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">GitHub Repository URL or "owner/repo"</label>
+              <input
+                type="text"
+                value={repo}
+                onChange={(e) => setRepo(e.target.value)}
+                placeholder="https://github.com/owner/repo"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+            <Button onClick={handleConnect} className="w-full text-lg py-6" disabled={!repo}>
+              Connect Agent
+            </Button>
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              Your token is managed securely via the local MCP server.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <div className="container mx-auto p-8 max-w-5xl">
@@ -58,15 +112,21 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-col items-end gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Git Repo:</span>
-              <input
-                type="text"
-                value={repo}
-                onChange={(e) => setRepo(e.target.value)}
-                className="px-3 py-1.5 rounded border bg-background text-sm w-64 focus:ring-2 focus:ring-primary outline-none"
-                placeholder="owner/repo"
-              />
+            <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-lg border">
+              <span className="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                <CheckCircle className="w-3 h-3 text-green-500" /> Connected:
+              </span>
+              <span className="text-sm font-bold text-foreground">{repo}</span>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('active_repo');
+                  setIsConnected(false);
+                  setRepo('');
+                }}
+                className="ml-2 text-xs text-primary hover:underline"
+              >
+                Change
+              </button>
             </div>
 
             <div className="flex items-center gap-4">
