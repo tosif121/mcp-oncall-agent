@@ -22,7 +22,7 @@ export async function buildIncidentContext(incidentId: string, serviceName: stri
 
   // 1. Fetch Data in Parallel
   const [commits, logs, tickets, messages] = await Promise.all([
-    fetchRecentCommits('example/repo'),
+    fetchRecentCommits(process.env.GITHUB_REPO || 'archestra-ai/archestra'),
     fetchErrorLogs(serviceName, 60),
     searchJiraTickets(errorKeyword),
     fetchSlackMessages(errorKeyword), // Added
