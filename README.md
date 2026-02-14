@@ -2,6 +2,8 @@
 
 > Automates the first 15 minutes of on-call incident investigation by correlating real-time code changes, logs, and tickets using **Archestra MCP**.
 
+### 🎬 [Watch the Demo →](https://youtu.be/20m2neXIM4I)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
