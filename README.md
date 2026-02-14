@@ -1,82 +1,109 @@
 # On-Call Context Builder (Universal DevOps Agent)
 
-**The Winning Strategy:** Build a tool that solves the "2 AM Nightmare" for on-call engineers.
+> Automates the first 15 minutes of on-call incident investigation by correlating real-time code changes, logs, and tickets using **Archestra MCP**.
 
-## 🚀 How to Demo
+## 🚀 Quick Start
 
-### 1. **Connect Your Repository**
+### Prerequisites
 
-- The app now supports **Dynamic Repository Connection**.
-- Enter any public GitHub repository URL (e.g., `https://github.com/owner/repo`) in the dashboard header.
-- Click **Connect** to link the agent to that codebase.
+- Node.js 20+
+- Docker (for Archestra MCP Server)
+- Supabase account
+- GitHub Personal Access Token
 
-### 2. **Simulate an Incident**
+### Setup
 
-- Click the **"Simulate Incident"** button.
-- Choose a scenario (SRE, Security, or FinOps).
-- The Agent will:
-  1.  **Analyze** the incident context.
-  2.  **Fetch Real Commits** from your connected repo via MCP.
-  3.  **Search Logs & Tickets** (simulated for demo stability).
-  4.  **Generate a Report** with root cause analysis.
+```bash
+# 1. Clone the repo
+git clone https://github.com/tosif121/mcp-oncall-agent.git
+cd mcp-oncall-agent
 
-### 3. **View Report**
+# 2. Install dependencies
+npm install
 
-## 🏆 Why This Works
+# 3. Configure environment
+cp .env.local.example .env.local
+# Edit .env.local with your credentials
 
-### 1. Solves a Real Problem
+# 4. Start Archestra MCP Server (Docker)
+docker run -d -p 9000:9000 \
+  -e GITHUB_TOKEN=your_github_token \
+  archestra/platform
 
-Judges personally experience the pain of on-call incidents. We solve it by automating the first 15 minutes of investigation.
+# 5. Run the app
+npm run dev
+```
 
-### 2. Tight Scope = Polished Execution
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Instead of 20 half-baked features, we focused on **5 Core Features**:
+## 🎯 How It Works
 
-### 3. Demo Story
-
-> "It's 2 AM. PagerDuty wakes you up: '500 errors spiking.' You open our agent. In 10 seconds, it shows: Recent commit by John, error logs pointing to DB timeout, related Jira ticket about DB performance. Suggested action: Rollback commit or scale DB. You click 'Rollback.' Incident resolved. Back to sleep. This is what we built."
+1. **Connect Your Repository** — Enter any GitHub repo (e.g. `owner/repo`). The agent links to it via MCP.
+2. **Trigger Live Incident** — Click the button. The agent creates a production alert.
+3. **AI Investigates** — The agent fetches **real commits** from your repo, analyzes them, and generates a root cause report.
+4. **View Report** — See correlated commits, AI analysis, and recommended actions.
 
 ## 🏗️ Architecture
-
-Leveraging Archestra's unique features (858 MCP servers, multi-LLM, security controls).
 
 ```mermaid
 graph TD
     User([User / UI])
-    Sim([PagerDuty Sim]) -->|Webhook| Agent[Next.js Agent]
+    PD([PagerDuty / Webhook]) -->|Alert| Agent[Next.js Agent]
     Agent <-->|Read/Write| DB[(Supabase)]
-    Agent -->|Query| AI[AI Logic Layer]
+    Agent -->|Analyze| AI[AI Logic Layer]
     Agent -->|Connect| MCP[Archestra MCP Gateway]
-    MCP -->|Fetch| GH[GitHub]
-    MCP -->|Search| Logs[Datadog/CloudWatch]
-    MCP -->|Search| Jira[Jira Tickets]
-    MCP -->|Search| Slack[Slack Chat]
+    MCP -->|Fetch Commits| GH[GitHub]
+    MCP -->|Search Logs| Logs[Datadog / CloudWatch]
+    MCP -->|Search Tickets| Jira[Jira]
+    MCP -->|Chat Context| Slack[Slack]
     AI -->|Report| Agent
-    User -->|View Incident| Agent
-    User -->|Execute Action| Agent
-    Agent -->|Trigger| MCP
-    MCP -->|Remediate| Infra[Infrastructure]
+    User -->|View / Act| Agent
 ```
 
-## 🚀 Core Features (Tight Scope)
+## 🔑 Core Features
 
-1.  **Alert Display:** Real-time dashboard showing critical incident details.
-2.  **GitHub Commits:** Fetches recent changes via **Archestra GitHub MCP**.
-3.  **Log Patterns:** Displays error logs and anomaly patterns (via Log MCP).
-4.  **AI Summary:** Archestra Logic Layer analyzes context and suggests remediation.
-5.  **Action Buttons:** One-click Rollback/Scale triggers with confirmation.
-6.  **Bonus:** Slack Notification preview with deep links.
+| Feature                     | Description                                     | Status   |
+| --------------------------- | ----------------------------------------------- | -------- |
+| **Dynamic Repo Connection** | Connect any GitHub repo from the UI             | ✅ Live  |
+| **Real Commit Fetching**    | Fetches actual commits via Archestra GitHub MCP | ✅ Live  |
+| **AI Root Cause Analysis**  | Correlates code changes with incident context   | ✅ Live  |
+| **Incident Dashboard**      | Real-time view of all active incidents          | ✅ Live  |
+| **One-Click Actions**       | Rollback / Scale / Investigate buttons          | ✅ Live  |
+| **Slack Notifications**     | Alert your team with deep links                 | ✅ Live  |
+| **Jira / Log Integration**  | Plug in via MCP when ready                      | 🔌 Ready |
 
-## ✅ Final Checklist
+## 🛠️ Tech Stack
 
-- [x] Solve a problem judges personally experience (on-call incidents)
-- [x] Tight scope (3 core workflows, not 20 features)
-- [x] Leverage your existing skills (APIs, Next.js, databases)
-- [x] Use Archestra's unique features (858 MCP servers, multi-LLM, security controls)
-- [x] Polish over features (working demo > half-baked features)
-- [x] Tell a compelling story (3-minute demo with emotional hook)
-- [x] Document obsessively (README, architecture diagram, video)
+- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Backend:** Next.js API Routes, Archestra MCP SDK
+- **Database:** Supabase (PostgreSQL + Realtime)
+- **AI:** Archestra Logic Layer (Multi-LLM)
+- **Protocol:** Model Context Protocol (MCP)
 
-Go build the On-Call Context Builder. Execute cleanly. You'll win this time.
+## 📁 Project Structure
 
-# mcp-oncall-agent
+```
+src/
+├── app/
+│   ├── page.tsx              # Dashboard (Connect Repo + Trigger Incident)
+│   ├── incident/[id]/page.tsx # Incident Report View
+│   └── api/incident/route.ts  # Incident Webhook API
+├── lib/
+│   ├── agent.ts               # Core Agent Logic (orchestration)
+│   ├── mcp.ts                 # MCP Client (GitHub commit fetching)
+│   ├── supabase.ts            # Database client
+│   └── archestra/
+│       └── analyze.ts         # AI Analysis Layer
+└── components/                # UI Components
+```
+
+## 🏆 Why This Wins
+
+1. **Solves a Real Problem** — Every engineer has been paged at 2 AM with zero context.
+2. **Real Integration** — No mocks. Fetches actual commits from your repo.
+3. **MCP Native** — Demonstrates the power of Archestra's protocol for tool orchestration.
+4. **Tight Scope** — 5 polished features > 20 half-baked ones.
+
+## 📄 License
+
+MIT
